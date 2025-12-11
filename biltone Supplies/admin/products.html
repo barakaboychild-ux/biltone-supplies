@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products | BiltoneBrands</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind.config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+
+<body class="bg-cover bg-center bg-fixed font-sans text-gray-800 flex min-h-screen"
+    style="background-image: url('../images/admin_bg_lighter.png');">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100">
+            <h1 class="text-xl font-bold text-primary-900">Admin Panel</h1>
+        </div>
+        <nav class="flex-grow p-4 space-y-2">
+            <a href="dashboard.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Dashboard</a>
+            <a href="products.html"
+                class="block px-4 py-2 bg-primary-50 text-primary-700 font-semibold rounded-lg">Products</a>
+            <a href="orders.html" id="orders-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Orders</a>
+            <a href="users.html" id="users-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">Manage Users</a>
+            <a href="messages.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Messages</a>
+            <a href="edit_about.html" id="content-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">About Us</a>
+            <a href="profile.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Profile</a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="App.logout()"
+                class="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Products</h2>
+            <button onclick="openModal()"
+                class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition">
+                + Add Product
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50 text-gray-500">
+                        <tr>
+                            <th class="px-6 py-3">Image</th>
+                            <th class="px-6 py-3">Title</th>
+                            <th class="px-6 py-3">Category</th>
+                            <th class="px-6 py-3">Price</th>
+                            <th class="px-6 py-3">Stock</th>
+                            <th class="px-6 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table" class="divide-y divide-gray-100">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+            <h3 id="modal-title" class="text-xl font-bold text-gray-900 mb-4">Add Product</h3>
+            <form id="product-form" class="space-y-4">
+                <input type="hidden" id="p-id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" id="p-title" required class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <!-- Category -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select id="p-category" required
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
+                        <option value="Tools">Tools</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Cosmetics">Cosmetics</option>
+                        <option value="Grooming">Grooming</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+
+                <!-- Price & Stock (Moved Up) -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Price (KSH)</label>
+                        <input type="number" id="p-price" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+                        <input type="number" id="p-stock" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Special Offer Section -->
+                <div class="border-t border-gray-100 pt-4 mt-4">
+                    <h3 class="font-bold text-gray-900 mb-2">Special Offer (Optional)</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Offer Price (KSH)</label>
+                            <input type="number" id="p-offer-price" placeholder="Discounted Price"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Offer Ends</label>
+                            <input type="datetime-local" id="p-offer-date"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
+                    <div id="drop-zone"
+                        class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-500 transition cursor-pointer"
+                        onclick="document.getElementById('p-image-file').click()">
+                        <div id="preview-container" class="hidden mb-2 relative group">
+                            <img id="image-preview" src="" class="mx-auto h-32 object-contain rounded">
+                            <div
+                                class="absolute inset-0 bg-black bg-opacity-50 hidden group-hover:flex items-center justify-center text-white text-xs rounded">
+                                Click to Change</div>
+                        </div>
+                        <div id="upload-prompt">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400 mx-auto mb-2"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-sm text-gray-500">Drag & Drop or <span
+                                    class="text-primary-500 font-semibold">Browse</span></span>
+                        </div>
+                    </div>
+                    <input type="file" id="p-image-file" accept="image/*" class="hidden">
+                    <input type="hidden" id="p-image-base64">
+                </div>
+                <div class="flex justify-end gap-4 mt-6">
+                    <button type="button" onclick="closeModal()"
+                        class="text-gray-500 hover:text-gray-700">Cancel</button>
+                    <button type="submit"
+                        class="bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Auth Check
+        const user = JSON.parse(sessionStorage.getItem('biltone_session'));
+        if (!user) window.location.href = 'login.html';
+        if (user.role === 'owner') {
+            document.getElementById('users-link').classList.remove('hidden');
+            const contentLink = document.getElementById('content-link');
+            if (contentLink) contentLink.classList.remove('hidden');
+            const ordersLink = document.getElementById('orders-link');
+            if (ordersLink) ordersLink.classList.add('hidden');
+        }
+
+        function renderProducts() {
+            const products = DB.getProducts();
+            const tbody = document.getElementById('products-table');
+            tbody.innerHTML = '';
+
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50';
+                tr.innerHTML = `
+                    <td class="px-6 py-4"><img src="${p.image}" class="w-10 h-10 rounded object-cover bg-gray-100" onerror="this.src='https://placehold.co/100x100?text=NA'"></td>
+                    <td class="px-6 py-4 font-medium text-gray-900">${p.title}</td>
+                    <td class="px-6 py-4 text-gray-500">${p.category || 'General'}</td>
+                    <td class="px-6 py-4 font-bold">${App.formatMoney(p.price)}</td>
+                    <td class="px-6 py-4">${p.stock}</td>
+                    <td class="px-6 py-4 flex gap-2">
+                        <button onclick="editProduct(${p.id})" class="text-primary-600 hover:text-primary-800 font-medium">Edit</button>
+                        <button onclick="confirmDelete(${p.id})" class="text-red-500 hover:text-red-700 font-medium ml-2">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+
+        window.confirmDelete = function (id) {
+            console.log('Attempting to delete product:', id);
+            if (confirm('Are you sure you want to delete this product?')) {
+                DB.deleteProduct(Number(id));
+                renderProducts();
+                App.showToast('Product Deleted');
+            }
+        };
+
+        // Image Upload Logic
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('p-image-file');
+        const hiddenInput = document.getElementById('p-image-base64');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const uploadPrompt = document.getElementById('upload-prompt');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('border-primary-500', 'bg-primary-50'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-primary-500', 'bg-primary-50'), false);
+        });
+
+        dropZone.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFiles, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles({ target: { files: files } });
+        }
+
+        function handleFiles(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    // Compress Image
+                    const img = new Image();
+                    img.src = reader.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const maxWidth = 800;
+                        const scale = maxWidth / img.width;
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        setPreview(compressedBase64);
+                    };
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setPreview(src) {
+            hiddenInput.value = src;
+            imagePreview.src = src;
+            previewContainer.classList.remove('hidden');
+            uploadPrompt.classList.add('hidden');
+        }
+
+        function resetPreview() {
+            hiddenInput.value = '';
+            imagePreview.src = '';
+            previewContainer.classList.add('hidden');
+            uploadPrompt.classList.remove('hidden');
+        }
+
+        window.editProduct = function (id) {
+            openModal(id);
+        };
+
+        window.openModal = function (id = null) {
+            document.getElementById('product-modal').classList.remove('hidden');
+            if (id) {
+                const p = DB.getProduct(id);
+                document.getElementById('modal-title').textContent = 'Edit Product';
+                document.getElementById('p-id').value = p.id;
+                document.getElementById('p-title').value = p.title;
+                document.getElementById('p-category').value = p.category;
+                document.getElementById('p-price').value = p.price;
+                document.getElementById('p-stock').value = p.stock;
+                document.getElementById('p-offer-price').value = p.offerPrice || '';
+                document.getElementById('p-offer-date').value = p.offerExpires ? p.offerExpires.slice(0, 16) : '';
+                setPreview(p.image);
+            } else {
+                document.getElementById('modal-title').textContent = 'Add Product';
+                document.getElementById('product-form').reset();
+                document.getElementById('p-id').value = '';
+                resetPreview();
+            }
+        };
+
+        window.closeModal = function () {
+            document.getElementById('product-modal').classList.add('hidden');
+        };
+
+        document.getElementById('product-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('p-id').value;
+            const product = {
+                id: id ? parseInt(id) : Date.now(),
+                title: document.getElementById('p-title').value,
+                price: parseInt(document.getElementById('p-price').value),
+                stock: parseInt(document.getElementById('p-stock').value),
+                category: document.getElementById('p-category').value,
+                image: document.getElementById('p-image-base64').value || 'https://placehold.co/400x400?text=No+Image',
+                offerPrice: document.getElementById('p-offer-price').value ? parseInt(document.getElementById('p-offer-price').value) : null,
+                offerExpires: document.getElementById('p-offer-date').value ? new Date(document.getElementById('p-offer-date').value).toISOString() : null
+            };
+            DB.saveProduct(product);
+            closeModal();
+            renderProducts();
+            App.showToast('Product Saved');
+        });
+
+        renderProducts();
+    </script>
+</body>
+
+</html>

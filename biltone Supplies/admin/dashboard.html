@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | BiltoneBrands</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind.config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+
+<body class="bg-cover bg-center bg-fixed font-sans text-gray-800 flex min-h-screen"
+    style="background-image: url('../images/admin_bg_lighter.png');">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100">
+            <h1 class="text-xl font-bold text-primary-900">Admin Panel</h1>
+        </div>
+        <nav class="flex-grow p-4 space-y-2">
+            <a href="dashboard.html"
+                class="block px-4 py-2 bg-primary-50 text-primary-700 font-semibold rounded-lg">Dashboard</a>
+            <a href="products.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Products</a>
+            <a href="orders.html" id="orders-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Orders</a>
+            <a href="users.html" id="users-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">Manage Users</a>
+            <a href="messages.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Messages</a>
+            <a href="edit_about.html" id="content-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">About Us</a>
+            <a href="profile.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Profile</a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="App.logout()"
+                class="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
+            <div class="flex items-center gap-4">
+                <div class="text-sm text-gray-500 hidden md:block">Welcome, <span id="admin-name"
+                        class="font-semibold">Admin</span></div>
+                <button onclick="App.logout()"
+                    class="text-sm text-red-500 font-semibold hover:text-red-700">Logout</button>
+            </div>
+        </div>
+
+        <!-- Site Content Editor Link (Moved to Sidebar) -->
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="text-gray-500 text-sm mb-1">Total Orders</div>
+                <div class="text-3xl font-bold text-gray-900" id="total-orders">0</div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="text-gray-500 text-sm mb-1">Total Revenue</div>
+                <div class="text-3xl font-bold text-primary-600" id="total-revenue">KES 0</div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="text-gray-500 text-sm mb-1">Products</div>
+                <div class="text-3xl font-bold text-gray-900" id="total-products">0</div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-gray-900">Recent Orders</h3>
+                <a href="orders.html" class="text-sm text-primary-500 hover:underline">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50 text-gray-500">
+                        <tr>
+                            <th class="px-6 py-3">Order ID</th>
+                            <th class="px-6 py-3">Customer</th>
+                            <th class="px-6 py-3">Total</th>
+                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-orders" class="divide-y divide-gray-100">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Auth Check
+        const user = JSON.parse(sessionStorage.getItem('biltone_session'));
+        if (!user) window.location.href = 'login.html';
+        document.getElementById('admin-name').textContent = user.name;
+
+        // Owner Check
+        if (user.role === 'owner') {
+            document.getElementById('users-link').classList.remove('hidden');
+            const contentLink = document.getElementById('content-link');
+            if (contentLink) contentLink.classList.remove('hidden');
+            const ordersLink = document.getElementById('orders-link');
+            if (ordersLink) ordersLink.classList.add('hidden');
+        }
+
+        // Load Stats
+        const orders = DB.getOrders();
+        const products = DB.getProducts();
+
+        document.getElementById('total-orders').textContent = orders.length;
+        document.getElementById('total-products').textContent = products.length;
+
+        const revenue = orders.reduce((sum, o) => sum + o.total, 0);
+        document.getElementById('total-revenue').textContent = App.formatMoney(revenue);
+
+        // Load Recent Orders
+        const recent = orders.slice(0, 5);
+        const tbody = document.getElementById('recent-orders');
+
+        if (recent.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No orders yet.</td></tr>';
+        } else {
+            recent.forEach(order => {
+                const row = `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 font-mono text-xs">${order.id}</td>
+                        <td class="px-6 py-4">${order.customer.name}</td>
+                        <td class="px-6 py-4 font-bold">${App.formatMoney(order.total)}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold ${order.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}">${order.status}</span></td>
+                        <td class="px-6 py-4 text-gray-500">${new Date(order.date).toLocaleDateString()}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+    </script>
+</body>
+
+</html>

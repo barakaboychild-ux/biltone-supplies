@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users | Biltone Supplies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind.config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+
+<body class="bg-cover bg-center bg-fixed font-sans text-gray-800 flex min-h-screen"
+    style="background-image: url('../images/admin_bg_lighter.png');">
+
+    <!-- Sidebar (Same as dashboard) -->
+    <aside class="w-64 bg-white shadow-md hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100">
+            <h1 class="text-xl font-bold text-primary-900">Admin Panel</h1>
+        </div>
+        <nav class="flex-grow p-4 space-y-2">
+            <a href="dashboard.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Dashboard</a>
+            <a href="products.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Products</a>
+            <a href="orders.html" id="orders-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Orders</a>
+            <a href="users.html" id="users-link"
+                class="block px-4 py-2 bg-primary-50 text-primary-700 font-medium rounded-lg transition hidden">Manage
+                Users</a>
+            <a href="messages.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Messages</a>
+            <a href="edit_about.html" id="content-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">About Us</a>
+            <a href="profile.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Profile</a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="App.logout()"
+                class="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">User Management</h2>
+
+        <!-- Pending Profile Updates (Owner Only) -->
+        <div id="pending-updates-section" class="hidden mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Pending Profile Updates</h2>
+            <div class="bg-yellow-50 rounded-xl shadow-sm border border-yellow-200 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-yellow-100 text-yellow-800 text-sm">
+                        <tr>
+                            <th class="p-4">Email</th>
+                            <th class="p-4">Requested Changes</th>
+                            <th class="p-4">Date</th>
+                            <th class="p-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-updates-table" class="divide-y divide-yellow-200 text-sm">
+                        <!-- Updates go here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100">
+                <h3 class="font-bold text-gray-900">Admin Accounts</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50 text-gray-500">
+                        <tr>
+                            <th class="px-6 py-3">Name</th>
+                            <th class="px-6 py-3">Email</th>
+                            <th class="px-6 py-3">Role</th>
+                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table" class="divide-y divide-gray-100">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Auth & Role Check
+        const user = JSON.parse(sessionStorage.getItem('biltone_session'));
+        if (!user || user.role !== 'owner') {
+            alert("Access Denied. Owner only.");
+            window.location.href = 'dashboard.html';
+        }
+
+        function renderUsers() {
+            const users = DB.getUsers();
+            if (user.role === 'owner') {
+                document.getElementById('users-link').classList.remove('hidden');
+                const contentLink = document.getElementById('content-link');
+                if (contentLink) contentLink.classList.remove('hidden');
+                const ordersLink = document.getElementById('orders-link');
+                if (ordersLink) ordersLink.classList.add('hidden');
+
+                // Show Pending Updates Section
+                document.getElementById('pending-updates-section').classList.remove('hidden');
+                renderPendingUpdates();
+            }
+            const tbody = document.getElementById('users-table');
+            tbody.innerHTML = '';
+
+            users.forEach(u => {
+                const isMe = u.email === user.email;
+                const statusBadge = u.approved
+                    ? '<span class="px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-700">Active</span>'
+                    : '<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-100 text-yellow-700">Pending</span>';
+
+                const actionBtn = !u.approved
+                    ? `<button onclick="approve('${u.email}')" class="text-primary-600 hover:underline font-bold">Approve</button>`
+                    : (isMe ? '<span class="text-gray-400">Current User</span>' : '<span class="text-gray-400">Approved</span>');
+
+                const row = `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium text-gray-900">${u.name || 'N/A'}</td>
+                        <td class="px-6 py-4">${u.email}</td>
+                        <td class="px-6 py-4 capitalize">${u.role}</td>
+                        <td class="px-6 py-4">${statusBadge}</td>
+                        <td class="px-6 py-4">${actionBtn}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        window.approve = function (email) {
+            if (confirm(`Approve admin access for ${email}?`)) {
+                DB.approveUser(email);
+                renderUsers();
+            }
+        };
+
+        window.renderPendingUpdates = function () {
+            const updates = DB.getPendingUpdates();
+            const tbody = document.getElementById('pending-updates-table');
+            tbody.innerHTML = '';
+
+            if (updates.length === 0) {
+                document.getElementById('pending-updates-section').classList.add('hidden');
+                return;
+            }
+            document.getElementById('pending-updates-section').classList.remove('hidden');
+
+            updates.forEach(update => {
+                const changes = Object.entries(update.userData)
+                    .map(([key, val]) => `<strong>${key}:</strong> ${val}`)
+                    .join('<br>');
+
+                const row = `
+                    <tr class="hover:bg-yellow-50">
+                        <td class="p-4">${update.email}</td>
+                        <td class="p-4 text-sm">${changes}</td>
+                        <td class="p-4 text-gray-500">${new Date(update.date).toLocaleDateString()}</td>
+                        <td class="p-4 flex gap-2">
+                            <button onclick="approveUpdate('${update.id}')" class="text-green-600 hover:text-green-800 font-bold text-sm">Approve</button>
+                            <button onclick="rejectUpdate('${update.id}')" class="text-red-500 hover:text-red-700 font-bold text-sm">Reject</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        };
+
+        window.approveUpdate = function (id) {
+            if (confirm('Approve this profile update?')) {
+                DB.approveProfileUpdate(id);
+                renderPendingUpdates();
+                renderUsers();
+                App.showToast('Update Approved');
+            }
+        };
+
+        window.rejectUpdate = function (id) {
+            if (confirm('Reject this profile update?')) {
+                DB.rejectProfileUpdate(id);
+                renderPendingUpdates();
+                App.showToast('Update Rejected');
+            }
+        };
+
+        renderUsers();
+    </script>
+</body>
+
+</html>

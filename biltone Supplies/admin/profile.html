@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | BiltoneBrands</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind.config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+
+<body class="bg-gray-50 font-sans text-gray-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-2xl font-bold text-primary-900">Admin Panel</h2>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="dashboard.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Dashboard</a>
+            <a href="products.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Products</a>
+            <a href="orders.html" id="orders-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Orders</a>
+            <a href="users.html" id="users-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">Manage Users</a>
+            <a href="messages.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Messages</a>
+            <a href="edit_about.html" id="content-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">About Us</a>
+            <!-- Active Profile Link -->
+            <a href="profile.html"
+                class="block px-4 py-2 bg-primary-50 text-primary-700 font-medium rounded-lg transition">Profile</a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="App.logout()"
+                class="flex items-center gap-2 text-gray-600 hover:text-red-600 transition w-full px-4 py-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Log Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <header class="bg-white border-b border-gray-200 p-4 md:hidden flex justify-between items-center">
+            <h1 class="font-bold text-lg text-gray-900">My Profile</h1>
+            <button onclick="App.logout()" class="text-sm text-gray-600">Log Out</button>
+        </header>
+
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6 hidden md:block">My Profile</h1>
+
+            <div class="max-w-2xl bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <form id="profile-form" onsubmit="handleUpdate(event)" class="space-y-6">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="p-name" readonly
+                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-500 transition focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+
+                    <!-- Email (Read Only) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="p-email" readonly
+                            class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-gray-500 cursor-not-allowed">
+                        <p class="text-xs text-gray-500 mt-1">Email cannot be changed.</p>
+                    </div>
+
+                    <div id="password-section" class="hidden">
+                        <div class="border-t border-gray-100 my-6"></div>
+                        <!-- Change Password -->
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Change Password</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password (current
+                                        password required to save)</label>
+                                    <input type="password" id="p-password" placeholder="Leave blank to keep current"
+                                        class="w-full border border-gray-300 rounded-lg px-4 py-2 transition focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-4 pt-4">
+                        <button type="button" id="edit-btn" onclick="toggleEdit()"
+                            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition font-medium">
+                            Edit Profile
+                        </button>
+                        <button type="submit" id="save-btn"
+                            class="hidden bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition font-medium shadow-md">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Password Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Confirm Changes</h3>
+            <p class="text-gray-600 mb-4">Please enter your current password to confirm these changes.</p>
+            <input type="password" id="confirm-password" placeholder="Current Password"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:ring-2 focus:ring-primary-500 focus:outline-none">
+            <div class="flex justify-end gap-3">
+                <button onclick="closeConfirmModal()"
+                    class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+                <button onclick="submitChanges()"
+                    class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check Auth and Load Data
+        const session = sessionStorage.getItem('biltone_session');
+        if (!session) {
+            window.location.href = 'login.html';
+        }
+
+        const user = JSON.parse(session);
+        document.getElementById('p-name').value = user.name || '';
+        document.getElementById('p-email').value = user.email || '';
+
+        // Owner/Admin specific links
+        if (user.role === 'owner') {
+            document.getElementById('users-link').classList.remove('hidden');
+            const contentLink = document.getElementById('content-link');
+            if (contentLink) contentLink.classList.remove('hidden');
+            const ordersLink = document.getElementById('orders-link');
+            if (ordersLink) ordersLink.classList.add('hidden');
+        }
+
+        function toggleEdit() {
+            const nameInput = document.getElementById('p-name');
+            const passSection = document.getElementById('password-section');
+            const editBtn = document.getElementById('edit-btn');
+            const saveBtn = document.getElementById('save-btn');
+
+            nameInput.readOnly = false;
+            nameInput.classList.remove('bg-gray-50', 'text-gray-500');
+            nameInput.classList.add('bg-white', 'text-gray-900');
+            nameInput.focus();
+
+            passSection.classList.remove('hidden');
+            editBtn.classList.add('hidden');
+            saveBtn.classList.remove('hidden');
+        }
+
+        function handleUpdate(e) {
+            e.preventDefault();
+            // Show Password Modal
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById('confirm-password').focus();
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            document.getElementById('confirm-password').value = '';
+        }
+
+        function submitChanges() {
+            const currentPass = document.getElementById('confirm-password').value;
+            if (!currentPass) {
+                alert('Password is required');
+                return;
+            }
+
+            // Verify Password locally
+            if (currentPass !== user.password) {
+                alert('Incorrect password');
+                return;
+            }
+
+            const name = document.getElementById('p-name').value;
+            const newPass = document.getElementById('p-password').value;
+
+            const updateData = { name };
+            if (newPass) updateData.password = newPass;
+
+            closeConfirmModal();
+
+            if (user.role === 'owner') {
+                // Owner updates directly
+                if (DB.updateUser(user.email, updateData)) {
+                    App.showToast('Profile updated successfully!');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    alert('Update failed');
+                }
+            } else {
+                // Admin requests update
+                DB.requestProfileUpdate(user.email, updateData);
+                App.showToast('Update requested! Waiting for owner approval.');
+                // Reset UI
+                setTimeout(() => location.reload(), 2000);
+            }
+        }
+    </script>
+</body>
+
+</html>
