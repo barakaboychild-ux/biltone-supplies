@@ -11,7 +11,29 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/tailwind.config.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#E0F2F1',
+                            100: '#B2DFDB',
+                            500: '#009688',
+                            900: '#004D40',
+                        },
+                        accent: {
+                            pink: '#EC4899', // Pink-500
+                            rose: '#F43F5E', // Rose-500
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- App Scripts -->
     <script src="js/db.js"></script>
@@ -151,36 +173,53 @@
 
     <script>
         // Render Featured Products
-        const products = DB.getProducts().slice(0, 4); // Get first 4
-        const container = document.getElementById('featured-products');
+        // Render Featured Products
+        try {
+            const products = DB.getProducts().slice(0, 4); // Get first 4
+            const container = document.getElementById('featured-products');
 
-        products.forEach(product => {
-            const hasOffer = product.offerPrice && new Date(product.offerExpires) > new Date();
-            const priceDisplay = hasOffer
-                ? `<span class="text-red-500 font-bold">${App.formatMoney(product.offerPrice)}</span> <span class="text-gray-400 line-through text-sm">${App.formatMoney(product.price)}</span>`
-                : `<span class="text-gray-900 font-bold">${App.formatMoney(product.price)}</span>`;
+            if (!products || products.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-8 text-gray-500">No products found. Database might be empty.</div>';
+            } else {
+                products.forEach(product => {
+                    const hasOffer = product.offerPrice && new Date(product.offerExpires) > new Date();
+                    const priceDisplay = hasOffer
+                        ? `<span class="text-red-500 font-bold">${App.formatMoney(product.offerPrice)}</span> <span class="text-gray-400 line-through text-sm">${App.formatMoney(product.price)}</span>`
+                        : `<span class="text-gray-900 font-bold">${App.formatMoney(product.price)}</span>`;
 
-            const card = `
-                <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group border border-gray-100">
-                    <div class="relative mb-4 overflow-hidden rounded-lg bg-gray-100 h-48">
-                        <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x400?text=NA'">
-                        ${hasOffer ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">OFFER</span>' : ''}
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-800 mb-2 truncate">${product.title}</h3>
-                        <div class="flex justify-between items-center">
-                            <div>${priceDisplay}</div>
-                            <button onclick="App.addToCart(DB.getProduct(${product.id}))" class="bg-primary-50 text-primary-600 p-2 rounded-full hover:bg-primary-100 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                            </button>
+                    const card = `
+                        <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group border border-gray-100">
+                            <div class="relative mb-4 overflow-hidden rounded-lg bg-gray-100 h-48">
+                                <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 relative z-10" onerror="this.onerror=null; this.src='https://placehold.co/400x400?text=No+Image'">
+                                ${hasOffer ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-20">OFFER</span>' : ''}
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800 mb-2 truncate">${product.title}</h3>
+                                <div class="flex justify-between items-center">
+                                    <div>${priceDisplay}</div>
+                                    <button onclick="App.addToCart(DB.getProduct(${product.id}))" class="bg-primary-50 text-primary-600 p-2 rounded-full hover:bg-primary-100 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += card;
-        });
+                    `;
+                    container.innerHTML += card;
+                });
+            }
+        } catch (e) {
+            console.error("Critical Error rendering products:", e);
+            const container = document.getElementById('featured-products');
+            if (container) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-red-500 bg-red-50 rounded p-4">
+                    <p class="font-bold">System Error</p>
+                    <p class="text-sm">${e.message}</p>
+                    <p class="text-xs mt-2">Please check console for details.</p>
+                </div>`;
+            }
+        }
     </script>
 </body>
 
