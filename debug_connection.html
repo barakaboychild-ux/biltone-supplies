@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biltone Diagnostics</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+
+        .log {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #333;
+            padding: 5px 0;
+        }
+
+        .error {
+            color: #f55;
+        }
+
+        .success {
+            color: #5f5;
+        }
+
+        .info {
+            color: #aaf;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>System Diagnostic Tool</h1>
+    <div id="output">Initializing...<br></div>
+
+    <script>
+        const log = (msg, type = 'info') => {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            document.getElementById('output').appendChild(div);
+        };
+
+        async function runTests() {
+            try {
+                // 1. Check Config
+                log("Checking Configuration...", 'info');
+                if (typeof CONFIG === 'undefined') throw new Error("CONFIG object missing. js/config.js not loaded?");
+                if (!CONFIG.SUPABASE_URL) throw new Error("SUPABASE_URL missing in CONFIG");
+                if (!CONFIG.SUPABASE_KEY) throw new Error("SUPABASE_KEY missing in CONFIG");
+                log("Configuration OK", 'success');
+
+                // 2. Init Supabase
+                log("Initializing Supabase Client...", 'info');
+                const supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+                log("Supabase Client Initialized", 'success');
+
+                // 3. Test Connection (Products)
+                log("Testing Database Connection (Reading Products)...", 'info');
+                const { data, error } = await supabase.from('products').select('count', { count: 'exact', head: true });
+
+                if (error) {
+                    throw new Error(`Database connection failed: ${error.message} (Hint: Check internet or Supabase status)`);
+                }
+                log(`Database Connection OK.`, 'success');
+
+                // 4. Test Auth Connectivity
+                log("Testing Auth Service Reachability...", 'info');
+                const { data: { session }, error: authError } = await supabase.auth.getSession();
+                if (authError) {
+                    throw new Error(`Auth service check failed: ${authError.message}`);
+                }
+                log("Auth Service Reachable", 'success');
+
+                log("ALL SYSTEMS GO. If registration fails, the issue might be specific to the 'profiles' table triggers or policies.", 'success');
+
+            } catch (e) {
+                log(`CRITICAL FAILURE: ${e.message}`, 'error');
+                log("SUGGESTION: If you see 'Failed to fetch', it might be a CORS issue running from file:// or network block.", 'error');
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+
+</html>

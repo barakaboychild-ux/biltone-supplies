@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Biltone Supplies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#E0F2F1',
+                            100: '#B2DFDB',
+                            500: '#009688',
+                            900: '#004D40',
+                        },
+                        accent: {
+                            pink: '#EC4899', // Pink-500
+                            rose: '#F43F5E', // Rose-500
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-primary-900 flex items-center gap-2">
+                <span
+                    class="bg-gradient-to-r from-primary-500 to-primary-900 text-transparent bg-clip-text">Biltone</span>
+                Supplies
+            </a>
+            <div class="hidden md:flex gap-6 font-medium text-gray-600">
+                <a href="index.html" class="hover:text-primary-500 transition">Home</a>
+                <a href="products.html" class="hover:text-primary-500 transition">Products</a>
+                <a href="track.html" class="hover:text-primary-500 transition">Track Order</a>
+                <a href="about.html" class="text-primary-500 font-bold">About Us</a>
+                <a href="contact.html" class="hover:text-primary-500 transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="cart.html" class="relative p-2 hover:bg-gray-100 rounded-full transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count"
+                        class="absolute top-0 right-0 bg-accent-pink text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                </a>
+                <a href="admin/login.html" id="admin-link"
+                    class="text-sm font-semibold text-primary-500 hover:text-primary-700">Admin Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <!-- Hero Header -->
+        <section class="bg-primary-900 text-white py-20 px-4 text-center">
+            <div class="container mx-auto max-w-4xl">
+                <h1 id="about-title" class="text-4xl md:text-6xl font-extrabold mb-6">About Biltone Supplies</h1>
+                <p class="text-xl text-primary-100 opacity-90 leading-relaxed">Defining the standard of professional barbering and beauty supplies in Kenya.</p>
+            </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section class="py-20 px-4">
+            <div class="container mx-auto max-w-6xl flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 space-y-6 order-2 md:order-1">
+                    <h2 class="text-3xl font-bold text-gray-900 border-l-4 border-primary-500 pl-4">Our Journey</h2>
+                    <div id="story-text" class="text-gray-600 text-lg leading-relaxed whitespace-pre-line">
+                        Loading our story...
+                    </div>
+                </div>
+                <!-- Image Frame 1 -->
+                <div class="md:w-1/2 order-1 md:order-2">
+                    <div class="relative group">
+                        <div class="absolute -inset-2 bg-gradient-to-r from-primary-500 to-primary-900 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                        <div class="relative bg-white rounded-2xl overflow-hidden shadow-2xl border-4 border-white h-96">
+                            <img id="about-img-1" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800" alt="Biltone Story" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values/Vision Section -->
+        <section class="bg-gray-100 py-20 px-4">
+            <div class="container mx-auto max-w-6xl flex flex-col md:flex-row items-center gap-12">
+                <!-- Image Frame 2 -->
+                <div class="md:w-1/2">
+                    <div class="relative group">
+                        <div class="absolute -inset-2 bg-gradient-to-r from-accent-pink to-accent-rose rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                        <div class="relative bg-white rounded-2xl overflow-hidden shadow-2xl border-4 border-white h-96">
+                            <img id="about-img-2" src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?w=800" alt="Biltone Vision" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 space-y-6">
+                    <h2 class="text-3xl font-bold text-gray-900 border-l-4 border-accent-pink pl-4">Our Mission</h2>
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        To empower every professional with the tools they need to achieve excellence. We don't just sell supplies; we support a lifestyle of precision and care.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+                            <div class="font-bold text-primary-900 text-2xl mb-1">Quality</div>
+                            <div class="text-sm text-gray-500 uppercase tracking-wider">Unmatched Standard</div>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+                            <div class="font-bold text-primary-900 text-2xl mb-1">Trusted</div>
+                            <div class="text-sm text-gray-500 uppercase tracking-wider">Global Partner</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-4 grid md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4">Biltone Supplies</h3>
+                <p class="text-sm mb-4">Biltone Supplies is your customer based platform dedicated to providing you
+                    with affordable barber shop and beauty supplies.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="products.html" class="hover:text-white">Products</a></li>
+                    <li><a href="track.html" class="hover:text-white">Track Order</a></li>
+                    <li><a href="about.html" class="hover:text-white">About Us</a></li>
+                    <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4">Contact Us</h4>
+                <div class="space-y-3 text-sm">
+                    <p class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Nairobi, Kenya
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        +254 115 516 136
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+            &copy; 2025 Biltone Supplies. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        async function waitForDB(retries = 10) {
+            for (let i = 0; i < retries; i++) {
+                if (window.DB && typeof window.DB.getContent === 'function') return true;
+                await new Promise(r => setTimeout(r, 300));
+            }
+            return false;
+        }
+
+        (async function init() {
+            try {
+                const dbReady = await waitForDB();
+                if (!dbReady) throw new Error("Database timed out.");
+
+                const content = await window.DB.getContent();
+                
+                // Set Hero Title
+                if (content.aboutTitle) document.getElementById('about-title').textContent = content.aboutTitle;
+                
+                // Set Story Text
+                if (content.aboutText) document.getElementById('story-text').textContent = content.aboutText;
+                
+                // Set Image Frames
+                if (content.aboutImage1) document.getElementById('about-img-1').src = content.aboutImage1;
+                if (content.aboutImage2) document.getElementById('about-img-2').src = content.aboutImage2;
+
+            } catch (e) {
+                console.error("About: Error loading content:", e);
+            }
+        })();
+    </script>
+</body>
+</html>

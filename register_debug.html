@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Debugger v2</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #222;
+            color: #fff;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            margin-top: 10px;
+        }
+
+        #log {
+            margin-top: 20px;
+            border-top: 1px solid #555;
+            padding-top: 10px;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            color: #ff5555;
+        }
+
+        .success {
+            color: #55ff55;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Registration Debugger v2</h1>
+    <p>The previous test failed because "example.com" was considered invalid.</p>
+    <p>Please enter a <strong>real-looking email</strong> (e.g., yourname123@gmail.com) and try again.</p>
+
+    <label>Email:</label>
+    <input type="email" id="testEmail" placeholder="test@gmail.com" value="test_admin_01@gmail.com">
+
+    <label>Password:</label>
+    <input type="text" id="testPass" value="password123">
+
+    <button onclick="testRegistration()">Try Registering</button>
+
+    <div id="log">Logs will appear here...</div>
+
+    <script>
+        function log(msg, type = '') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            const logEl = document.getElementById('log');
+            logEl.appendChild(div);
+            // Auto scroll
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        async function testRegistration() {
+            try {
+                // Clear previous success/error
+                document.getElementById('log').innerHTML = "Starting new test...";
+
+                const email = document.getElementById('testEmail').value;
+                const password = document.getElementById('testPass').value;
+
+                log(`Initializing Supabase...`, 'info');
+                if (typeof CONFIG === 'undefined' || !CONFIG.SUPABASE_URL) {
+                    throw new Error("Config missing. check js/config.js");
+                }
+                const supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+
+                log(`Attempting SignUp for: ${email}`);
+
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: { data: { full_name: "Debug User V2" } }
+                });
+
+                if (error) {
+                    log("REGISTRATION FAILED!", 'error');
+                    log(`Error Message: ${error.message}`);
+                    log(`(Status: ${error.status})`);
+                } else {
+                    log("REGISTRATION SUCCESS!", 'success');
+                    log(`User ID: ${data.user ? data.user.id : 'null'}`);
+                    log("The issue was likely just the 'example.com' domain.");
+                }
+
+            } catch (e) {
+                log(`CRITICAL EXCEPTION: ${e.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Settings | Biltone Supplies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/tailwind.config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+
+<body class="bg-gray-50 font-sans text-gray-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-2xl font-bold text-primary-900 font-primary">Admin Panel</h2>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="dashboard.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Dashboard</a>
+            <a href="products.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Products</a>
+            <a href="orders.html" id="orders-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Orders</a>
+            <a href="users.html" id="users-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">Manage Users</a>
+            <a href="messages.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Messages</a>
+            <!-- About Us Section (Keeping as sub-link if needed, but Settings covers it) -->
+            <a href="edit_about.html" id="content-link"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition hidden">About Us</a>
+            <!-- Settings Link (Active) -->
+            <a href="settings.html" id="settings-link"
+                class="block px-4 py-2 bg-primary-50 text-primary-700 font-medium rounded-lg transition">Site Settings</a>
+            <a href="profile.html"
+                class="block px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition">Profile</a>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <button onclick="App.logout()"
+                class="flex items-center gap-2 text-gray-600 hover:text-red-600 transition w-full px-4 py-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Log Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <header class="bg-white border-b border-gray-200 p-4 md:hidden flex justify-between items-center">
+            <h1 class="font-bold text-lg text-gray-900">Site Settings</h1>
+            <div class="flex gap-4">
+                <a href="settings.html" class="text-primary-600 font-bold">Settings</a>
+                <button onclick="App.logout()" class="text-sm text-gray-600">Log Out</button>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 font-primary">Site Settings</h1>
+                <p class="text-sm text-gray-500">Configure your brand assets and content.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Content Management (About Us) -->
+                <div class="lg:col-span-2 space-y-8">
+                    <section class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                        <div class="flex items-center gap-3 mb-6 border-b border-gray-50 pb-4">
+                            <div class="p-2 bg-primary-50 rounded-lg text-primary-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-900">About Page Content</h2>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Main Headline</label>
+                                <input type="text" id="about-title" placeholder="e.g., About Biltone Supplies"
+                                    class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:outline-none transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Our Story</label>
+                                <textarea id="about-text" rows="8" placeholder="Tell your customer about Biltone Supplies..."
+                                    class="w-full border border-gray-300 rounded-xl p-4 focus:ring-2 focus:ring-primary-500 focus:outline-none transition"></textarea>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <!-- Image 1 Upload -->
+                                <div class="p-6 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 hover:border-primary-500 transition relative overflow-hidden group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2 font-primary relative z-10">Story Image (Spot 1)</label>
+                                    <p class="text-xs text-gray-500 mb-4 relative z-10">Recommended: 800 x 1200 pixels (Portrait)</p>
+                                    
+                                    <div class="relative w-full h-48 bg-gray-100 rounded-xl flex flex-col items-center justify-center cursor-pointer overflow-hidden">
+                                        <input type="file" id="upload-img-1" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="handleImageSelect(1)">
+                                        <img id="preview-img-1" class="absolute inset-0 w-full h-full object-cover hidden z-10" />
+                                        <div id="placeholder-1" class="text-center z-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-gray-400 mb-2 group-hover:text-primary-500 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                            </svg>
+                                            <span class="text-sm text-gray-500 font-medium">Click or Drag Image</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="about-img-1" />
+                                </div>
+
+                                <!-- Image 2 Upload -->
+                                <div class="p-6 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 hover:border-primary-500 transition relative overflow-hidden group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2 font-primary relative z-10">Mission Image (Spot 2)</label>
+                                    <p class="text-xs text-gray-500 mb-4 relative z-10">Recommended: 1200 x 800 pixels (Landscape)</p>
+                                    
+                                    <div class="relative w-full h-48 bg-gray-100 rounded-xl flex flex-col items-center justify-center cursor-pointer overflow-hidden">
+                                        <input type="file" id="upload-img-2" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="handleImageSelect(2)">
+                                        <img id="preview-img-2" class="absolute inset-0 w-full h-full object-cover hidden z-10" />
+                                        <div id="placeholder-2" class="text-center z-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-gray-400 mb-2 group-hover:text-primary-500 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                            </svg>
+                                            <span class="text-sm text-gray-500 font-medium">Click or Drag Image</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="about-img-2" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <div class="flex justify-end pt-4">
+                        <button onclick="saveSettings()"
+                            class="px-10 py-4 bg-primary-900 text-white rounded-xl hover:bg-black transition font-bold shadow-2xl flex items-center gap-2 group">
+                            <span class="group-hover:scale-110 transition duration-300">Save Site Configuration</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Guidance/Tips -->
+                <div class="space-y-6">
+                    <div class="bg-primary-900 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold mb-4">Pro Tips 💇</h3>
+                            <ul class="space-y-3 text-sm text-primary-50">
+                                <li class="flex gap-2"><span>-</span> Use <b>Unsplash</b> or <b>Imgur</b> for high-quality image hosting.</li>
+                                <li class="flex gap-2"><span>-</span> Your story should focus on quality and professional barbering.</li>
+                                <li class="flex gap-2"><span>-</span> Changes are instant. Click the badge below to see them.</li>
+                            </ul>
+                            <a href="../about.html" target="_blank" class="mt-8 inline-block bg-white text-primary-900 px-6 py-2 rounded-full font-bold hover:bg-primary-50 transition">Preview Live Site</a>
+                        </div>
+                        <!-- Shape Overlay -->
+                        <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-primary-800 rounded-full blur-3xl opacity-50"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Check Auth
+        const session = sessionStorage.getItem('biltone_session');
+        if (!session) window.location.href = 'login.html';
+        const user = JSON.parse(session);
+
+        if (user.role === 'owner') {
+            document.getElementById('users-link').classList.remove('hidden');
+            document.getElementById('content-link').classList.remove('hidden');
+        }
+
+        // Global state for new files
+        let selectedFiles = { 1: null, 2: null };
+
+        // Load Settings
+        (async function load() {
+            try {
+                const content = await window.DB.getContent();
+                if (content.aboutTitle) document.getElementById('about-title').value = content.aboutTitle;
+                if (content.aboutText) document.getElementById('about-text').value = content.aboutText;
+                
+                if (content.aboutImage1) {
+                    document.getElementById('about-img-1').value = content.aboutImage1;
+                    showPreview(1, content.aboutImage1);
+                }
+                if (content.aboutImage2) {
+                    document.getElementById('about-img-2').value = content.aboutImage2;
+                    showPreview(2, content.aboutImage2);
+                }
+            } catch (e) {
+                console.error("Settings: Load Error", e);
+            }
+        })();
+
+        function showPreview(spotIndex, url) {
+            const preview = document.getElementById(`preview-img-${spotIndex}`);
+            const placeholder = document.getElementById(`placeholder-${spotIndex}`);
+            preview.src = url;
+            preview.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        }
+
+        function handleImageSelect(spotIndex) {
+            const fileInput = document.getElementById(`upload-img-${spotIndex}`);
+            const file = fileInput.files[0];
+            if (file) {
+                selectedFiles[spotIndex] = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    showPreview(spotIndex, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function saveSettings() {
+            const btn = document.querySelector('button[onclick="saveSettings()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Uploading & Processing...";
+            btn.disabled = true;
+            
+            try {
+                // Upload files if new ones were selected
+                let url1 = document.getElementById('about-img-1').value;
+                let url2 = document.getElementById('about-img-2').value;
+
+                if (selectedFiles[1]) {
+                    url1 = await window.DB.uploadFile(selectedFiles[1]);
+                }
+                if (selectedFiles[2]) {
+                    url2 = await window.DB.uploadFile(selectedFiles[2]);
+                }
+
+                const newContent = {
+                    aboutTitle: document.getElementById('about-title').value,
+                    aboutText: document.getElementById('about-text').value,
+                    aboutImage1: url1,
+                    aboutImage2: url2
+                };
+
+                await window.DB.saveContent(newContent);
+                App.showToast('Biltone Supplies Settings Updated!');
+            } catch (e) {
+                alert("Error saving: " + e.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+</html>
