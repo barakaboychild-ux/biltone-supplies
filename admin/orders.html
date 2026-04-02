@@ -17,8 +17,11 @@
 <body class="bg-cover bg-center bg-fixed font-sans text-gray-800 flex min-h-screen"
     style="background-image: url('../images/admin_bg_lighter.png');">
 
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-40 hidden md:hidden transition-opacity"></div>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md hidden md:flex flex-col">
+    <aside id="admin-sidebar" class="w-64 bg-white shadow-xl border-r border-gray-200 fixed inset-y-0 left-0 z-50 transform -translate-x-full md:relative md:translate-x-0 transition duration-300 ease-in-out flex flex-col">
         <div class="p-6 border-b border-gray-100">
             <h1 class="text-xl font-bold text-primary-900">Admin Panel</h1>
         </div>
@@ -48,8 +51,20 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-grow p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Orders</h2>
+    <main class="flex-1 flex flex-col overflow-hidden max-w-full">
+        <!-- Mobile Header -->
+        <header class="bg-white border-b border-gray-200 p-4 md:hidden flex justify-between items-center sticky top-0 z-30">
+            <div class="flex items-center gap-3">
+                <button id="mobile-sidebar-btn" class="p-1 text-gray-600 hover:bg-gray-100 rounded transition focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+                <h1 class="font-bold text-lg text-gray-900">Orders</h1>
+            </div>
+            <button onclick="App.logout()" class="text-sm font-semibold text-gray-600 hover:text-red-600 transition">Log Out</button>
+        </header>
+
+        <div class="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8 hidden md:block">Orders</h2>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
@@ -69,6 +84,7 @@
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     </main>
 

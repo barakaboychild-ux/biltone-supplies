@@ -13,6 +13,37 @@ const App = {
         this.loadCart();
         this.checkAuth();
         this.updateCartUI();
+        this.setupMobileMenu();
+        this.setupAdminMobileMenu();
+    },
+
+    setupMobileMenu() {
+        // Public site mobile menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+    },
+
+    setupAdminMobileMenu() {
+        // Admin dashboard mobile sidebar
+        const btn = document.getElementById('mobile-sidebar-btn');
+        const sidebar = document.getElementById('admin-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        if (btn && sidebar && overlay) {
+            const toggleSidebar = () => {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            };
+
+            btn.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+        }
     },
 
     // --- Cart System ---
