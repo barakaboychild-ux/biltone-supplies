@@ -74,13 +74,45 @@
 
         async saveProduct(product) {
             await this.ensureReady();
-            const isNew = !product.id || product.id > 1000000000; // Heuristic for timestamp ID
-            let payload = { ...product };
-            if (isNew) delete payload.id;
+            
+            // 1. Determine if this is a new product or existing
+            // (New products have temporary timestamps > 1bn, existing products have small DB IDs)
+            const isNew = !product.id || Number(product.id) > 1000000000; 
+            
+            // 2. EXPLICIT WHITELIST: Only send these columns to Supabase
+            // This prevents "cannot insert a non-DEFAULT value into column 'id'" errors
+            const payload = {
+                title: product.title,
+                price: parseFloat(product.price) || 0,
+                stock: parseInt(product.stock) || 0,
+                category: product.category,
+                image: product.image,
+                description: product.description || '',
+                offer_price: product.offer_price ? parseFloat(product.offer_price) : null,
+                offer_expires: product.offer_expires || null
+            };
 
-            const { data, error } = await supabase.from('products').upsert(payload).select();
-            if (error) throw error;
-            return data ? data[0] : null;
+            if (isNew) {
+                // INSERT: Postgres will auto-generate the ID
+                const { data, error } = await supabase.from('products').insert([payload]).select();
+                if (error) {
+                    console.error("DB Save Error (Insert):", error);
+                    throw error;
+                }
+                return data ? data[0] : null;
+            } else {
+                // UPDATE: Target the specific ID but don't include it in the data payload
+                const { data, error } = await supabase.from('products')
+                    .update(payload)
+                    .eq('id', product.id)
+                    .select();
+                
+                if (error) {
+                    console.error("DB Save Error (Update):", error);
+                    throw error;
+                }
+                return data ? data[0] : null;
+            }
         },
 
         async deleteProduct(id) {
@@ -97,10 +129,42 @@
 
             // Get profile for role
             const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).single();
+            
+            let userRole = 'admin';
+            let userName = email.split('@')[0];
+
+            if (profile) {
+                userRole = profile.role || 'admin';
+                userName = profile.full_name || userName;
+                
+                // Force-promote to owner if they happen to be the first/only registered user
+                if (userRole !== 'owner') {
+                    const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+                    if (count === 1) {
+                        userRole = 'owner';
+                        await supabase.from('profiles').update({ role: 'owner', approved: true }).eq('id', data.user.id);
+                    }
+                }
+            } else {
+                // Determine if they are the first user
+                const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+                userRole = count === 0 ? 'owner' : 'admin';
+                const isApproved = count === 0 ? true : false;
+                
+                // Attempt to insert profile securely
+                await supabase.from('profiles').upsert({
+                    id: data.user.id,
+                    email: email,
+                    role: userRole,
+                    full_name: userName,
+                    approved: isApproved
+                });
+            }
+
             return {
                 ...data.user,
-                role: profile ? profile.role : 'admin',
-                name: profile ? profile.full_name : email.split('@')[0]
+                role: userRole,
+                name: userName
             };
         },
 
@@ -112,6 +176,19 @@
                 options: { data: { full_name: name } } 
             });
             if (error) throw error;
+            
+            const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+            const userRole = count === 0 ? 'owner' : 'admin';
+            const isApproved = count === 0 ? true : false;
+
+            await supabase.from('profiles').upsert({
+                id: data.user.id,
+                email: email,
+                role: userRole,
+                full_name: name,
+                approved: isApproved
+            });
+            
             return data.user;
         },
 
@@ -225,6 +302,63 @@
                 status: 'pending'
             });
             if (error) throw error;
+            return true;
+        },
+
+        async getUsers() {
+            await this.ensureReady();
+            const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+            if (error) {
+                console.warn("DB: Could not fetch profiles. User needs Owner access or table doesn't have RLS allowed.", error);
+                return [];
+            }
+            return data || [];
+        },
+
+        async approveUser(email) {
+            await this.ensureReady();
+            const { error } = await supabase.from('profiles').update({ approved: true }).eq('email', email);
+            if (error) throw error;
+            return true;
+        },
+
+        async getPendingUpdates() {
+            await this.ensureReady();
+            const { data, error } = await supabase.from('update_requests')
+                .select('*')
+                .eq('status', 'pending')
+                .order('created_at', { ascending: false });
+            if (error) return [];
+            return (data || []).map(row => ({
+                id: row.id,
+                email: row.request_email,
+                userData: row.update_payload,
+                created_at: row.created_at
+            }));
+        },
+
+        async approveProfileUpdate(id) {
+            await this.ensureReady();
+            // 1. Get the request
+            const { data: reqData, error: reqErr } = await supabase.from('update_requests').select('*').eq('id', id).single();
+            if (reqErr || !reqData) throw new Error("Request not found");
+
+            // 2. Find internal user matching the email
+            const { data: profs } = await supabase.from('profiles').select('id').eq('email', reqData.request_email);
+            if (profs && profs.length > 0) {
+                const userId = profs[0].id;
+                // 3. Update the profile
+                await supabase.from('profiles').update(reqData.update_payload).eq('id', userId);
+            }
+
+            // 4. Mark as approved
+            await supabase.from('update_requests').update({ status: 'approved' }).eq('id', id);
+            return true;
+        },
+
+        async rejectProfileUpdate(id) {
+            await this.ensureReady();
+            await supabase.from('update_requests').update({ status: 'rejected' }).eq('id', id);
             return true;
         },
 

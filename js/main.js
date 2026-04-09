@@ -122,10 +122,15 @@ const App = {
 
     updateCartUI() {
         const count = this.state.cart.reduce((sum, item) => sum + item.quantity, 0);
-        const badge = document.getElementById('cart-count');
-        if (badge) {
-            badge.textContent = count;
-            badge.classList.toggle('hidden', count === 0);
+        const badge1 = document.getElementById('cart-count');
+        const badge2 = document.getElementById('cart-count-mobile');
+        if (badge1) {
+            badge1.textContent = count;
+            badge1.classList.toggle('hidden', count === 0);
+        }
+        if (badge2) {
+            badge2.textContent = count;
+            badge2.classList.toggle('hidden', count === 0);
         }
     },
 
@@ -162,15 +167,47 @@ const App = {
     },
 
     updateAuthUI() {
-        // Show/Hide Admin links based on auth
+        // Show/Hide Staff links based on auth
         const adminLink = document.getElementById('admin-link');
-        if (adminLink && this.state.user) {
-            adminLink.href = '#';
-            adminLink.textContent = 'Log Out';
-            adminLink.onclick = (e) => {
-                e.preventDefault();
-                this.logout();
-            };
+        const adminLinkMobile = document.getElementById('admin-link-mobile');
+        
+        const dashboardLink = document.getElementById('admin-dashboard-link');
+        const dashboardLinkMobile = document.getElementById('admin-dashboard-link-mobile');
+        
+        const staffNameDesktop = document.getElementById('staff-name-display-desktop');
+        const staffNameMobile = document.getElementById('staff-name-display-mobile');
+        
+        const handleLogout = (e) => {
+            e.preventDefault();
+            this.logout();
+        };
+
+        if (this.state.user) {
+            const userMeta = this.state.user.user_metadata || {};
+            const userName = userMeta.full_name || userMeta.first_name || (this.state.user.email ? this.state.user.email.split('@')[0] : 'Staff');
+
+            if (adminLink) {
+                adminLink.href = '#';
+                adminLink.textContent = 'Log Out';
+                adminLink.onclick = handleLogout;
+            }
+            if (adminLinkMobile) {
+                adminLinkMobile.href = '#';
+                adminLinkMobile.textContent = 'Log Out';
+                adminLinkMobile.onclick = handleLogout;
+            }
+            
+            if (dashboardLink) dashboardLink.classList.remove('hidden');
+            if (dashboardLinkMobile) dashboardLinkMobile.classList.remove('hidden');
+            
+            if (staffNameDesktop) {
+                staffNameDesktop.textContent = userName;
+                staffNameDesktop.classList.remove('hidden');
+            }
+            if (staffNameMobile) {
+                staffNameMobile.textContent = userName;
+                staffNameMobile.classList.remove('hidden');
+            }
         }
     },
 

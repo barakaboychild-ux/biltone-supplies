@@ -64,7 +64,15 @@
         </header>
 
         <div class="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8 hidden md:block">Orders</h2>
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                <h2 class="text-2xl font-bold text-gray-900 hidden md:block">Orders</h2>
+                
+                <!-- Order Tabs -->
+                <div class="flex bg-gray-100 p-1 rounded-lg">
+                    <button onclick="setTab('active')" id="tab-active" class="flex-1 px-4 py-2 text-sm font-bold bg-white text-primary-700 rounded-md shadow-sm transition">Active Orders</button>
+                    <button onclick="setTab('finished')" id="tab-finished" class="flex-1 px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition">Finished Orders</button>
+                </div>
+            </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
@@ -102,9 +110,35 @@
             // Removed the line that adds 'hidden' to orders-link.
         }
 
+        let currentTab = 'active';
+
+        function setTab(tab) {
+            currentTab = tab;
+            
+            const btnActive = document.getElementById('tab-active');
+            const btnFinished = document.getElementById('tab-finished');
+            
+            if (tab === 'active') {
+                btnActive.className = 'flex-1 px-4 py-2 text-sm font-bold bg-white text-primary-700 rounded-md shadow-sm transition';
+                btnFinished.className = 'flex-1 px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition';
+            } else {
+                btnFinished.className = 'flex-1 px-4 py-2 text-sm font-bold bg-white text-primary-700 rounded-md shadow-sm transition';
+                btnActive.className = 'flex-1 px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition';
+            }
+            renderOrders();
+        }
+
         async function renderOrders() {
             try {
-                const orders = await window.DB.getOrders();
+                let orders = await window.DB.getOrders();
+                
+                // Filter exactly as requested
+                if (currentTab === 'active') {
+                    orders = orders.filter(o => o.status !== 'Delivered' && o.status !== 'Cancelled');
+                } else {
+                    orders = orders.filter(o => o.status === 'Delivered' || o.status === 'Cancelled');
+                }
+
                 const tbody = document.getElementById('orders-table');
                 tbody.innerHTML = '';
 
