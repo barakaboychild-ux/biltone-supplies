@@ -175,7 +175,8 @@
                                 <div class="font-bold">${o.customer_details?.name || 'N/A'}</div>
                                 <div class="text-xs text-primary-600 font-medium">${o.customer_details?.email || ''}</div>
                                 <div class="text-xs text-gray-500">${o.customer_details?.phone || ''}</div>
-                                <div class="text-xs text-gray-500">${o.customer_details?.location || ''}</div>
+                                <div class="text-[10px] text-gray-500">${o.customer_details?.location || ''}</div>
+                                <div class="mt-1"><span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${o.customer_details?.payment_method === 'M-Pesa' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}">${o.customer_details?.payment_method || 'Standard'}</span></div>
                             </td>
                             <td class="px-6 py-4 max-w-xs truncate" title="${itemsSummary}">${itemsSummary}</td>
                             <td class="px-6 py-4 font-bold">${App.formatMoney(o.total)}</td>

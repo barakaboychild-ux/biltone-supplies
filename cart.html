@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart & Checkout | Biltone Supplies</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,8 +19,8 @@
                             900: '#004D40',
                         },
                         accent: {
-                            pink: '#EC4899', // Pink-500
-                            rose: '#F43F5E', // Rose-500
+                            pink: '#EC4899',
+                            rose: '#F43F5E',
                         }
                     },
                     fontFamily: {
@@ -39,9 +39,8 @@
 
 <body class="bg-gray-50 font-sans text-gray-800 flex flex-col min-h-screen">
 
-                <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50 border-b border-gray-100">
-        <!-- Desktop Navbar (Hidden on Mobile) -->
         <div class="hidden md:flex container mx-auto px-4 py-3 justify-between items-center">
             <a href="index.html" class="text-2xl font-bold text-primary-900 flex items-center gap-2">
                 <span class="bg-gradient-to-r from-primary-500 to-primary-900 text-transparent bg-clip-text">Biltone</span> Supplies
@@ -57,16 +56,12 @@
 
             <div class="flex items-center gap-4">
                 <a href="cart.html" class="relative p-2 hover:bg-gray-100 rounded-full transition text-gray-700 hover:text-primary-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <span id="cart-count"
-                        class="absolute top-0 right-0 bg-accent-pink text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-accent-pink text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
                 </a>
                 
-                <!-- Staff Menu Toggle -->
                 <div class="relative group">
                     <div class="flex flex-col items-center">
                         <span id="staff-name-display-desktop" class="text-[10px] uppercase font-bold text-primary-600 hidden mb-0.5"></span>
@@ -76,7 +71,6 @@
                             </svg>
                         </button>
                     </div>
-                    <!-- Dropdown Content -->
                     <div id="user-dropdown-desktop" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl py-2 border border-gray-100 z-50">
                         <a href="admin/login.html" id="admin-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 font-semibold transition">Staff Login</a>
                         <a href="admin/dashboard.html" id="admin-dashboard-link" class="hidden px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 font-semibold transition">Dashboard</a>
@@ -85,15 +79,13 @@
             </div>
         </div>
 
-        <!-- Mobile Navbar (Hidden on Desktop) -->
+        <!-- Mobile Navbar -->
         <div class="md:hidden flex flex-col pt-4 pb-3 px-4 gap-4 bg-white shadow-sm">
-            <!-- Top Row: Brand & Cart -->
             <div class="flex justify-between items-start px-1">
                 <a href="index.html" class="text-xl sm:text-2xl font-bold text-primary-900 flex items-center gap-1 tracking-tight mt-1">
                     <span class="bg-gradient-to-r from-primary-500 to-primary-900 text-transparent bg-clip-text">Biltone</span> Supplies
                 </a>
                 <div class="flex items-center gap-2">
-                    <!-- Staff Hamburger -->
                     <div class="relative z-50">
                         <div class="flex flex-col items-center">
                             <span id="staff-name-display-mobile" class="text-[10px] uppercase font-bold text-primary-600 hidden mb-0.5 whitespace-nowrap overflow-hidden max-w-[60px] text-ellipsis"></span>
@@ -103,64 +95,42 @@
                                 </svg>
                             </button>
                         </div>
-                        <!-- Dropdown Content -->
                         <div id="user-dropdown-mobile" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-2xl py-2 border border-gray-100">
                             <a href="admin/login.html" id="admin-link-mobile" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 font-semibold transition">Staff Login</a>
                             <a href="admin/dashboard.html" id="admin-dashboard-link-mobile" class="hidden px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 font-semibold transition">Dashboard</a>
                         </div>
                     </div>
-
-                    <!-- Cart -->
                     <a href="cart.html" class="relative p-2 hover:bg-gray-100 rounded-full transition text-gray-700 hover:text-primary-500 bg-gray-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span id="cart-count-mobile"
-                            class="absolute top-0 right-0 -mt-1 -mr-1 bg-accent-pink text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        <span id="cart-count-mobile" class="absolute top-0 right-0 -mt-1 -mr-1 bg-accent-pink text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
                     </a>
                 </div>
             </div>
-            <!-- Bottom Row: Navigation Icons -->
             <div class="flex justify-between items-center px-2 mt-2">
-                <a href="index.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition" title="Home">
+                <a href="index.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                     <span class="text-[10px] font-semibold mt-1.5">Home</span>
                 </a>
-                <a href="products.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition" title="Products">
+                <a href="products.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                     <span class="text-[10px] font-semibold mt-1.5">Products</span>
                 </a>
-                <a href="track.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition" title="Track">
+                <a href="track.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                     <span class="text-[10px] font-semibold mt-1.5">Track</span>
                 </a>
-                <a href="about.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition" title="About">
+                <a href="about.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span class="text-[10px] font-semibold mt-1.5">About</span>
                 </a>
-                <a href="contact.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition" title="Contact">
+                <a href="contact.html" class="flex flex-col items-center text-gray-500 hover:text-primary-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                     <span class="text-[10px] font-semibold mt-1.5">Contact</span>
                 </a>
             </div>
         </div>
-        <script>
-            // Close dropdowns if clicked outside
-            document.addEventListener('click', (e) => {
-                const btn1 = document.getElementById('user-dropdown-desktop')?.previousElementSibling;
-                const dd1 = document.getElementById('user-dropdown-desktop');
-                if (dd1 && btn1 && !btn1.contains(e.target) && !dd1.contains(e.target)) {
-                    dd1.classList.add('hidden');
-                }
-                const btn2 = document.getElementById('user-dropdown-mobile')?.previousElementSibling;
-                const dd2 = document.getElementById('user-dropdown-mobile');
-                if (dd2 && btn2 && !btn2.contains(e.target) && !dd2.contains(e.target)) {
-                    dd2.classList.add('hidden');
-                }
-            });
-        </script>
     </nav>
 
     <!-- Main Content -->
@@ -171,7 +141,6 @@
             <!-- Cart Items -->
             <div class="lg:w-2/3">
                 <div id="cart-items" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <!-- Items injected here -->
                     <div class="p-8 text-center text-gray-500">Your cart is empty.</div>
                 </div>
             </div>
@@ -179,7 +148,7 @@
             <!-- Checkout Form -->
             <div class="lg:w-1/3">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Checkout Details</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4 font-black">Checkout Details</h2>
                     <form id="checkout-form" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -197,19 +166,46 @@
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Delivery Location</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Delivery Location, Shop Name</label>
                             <textarea id="location" required rows="3"
+                                placeholder="eg (example in delivery location, Alibarber shavers, kijunje )"
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:outline-none"></textarea>
                         </div>
 
-                        <div class="border-t border-gray-100 pt-4 mt-4">
-                            <div class="flex justify-between text-lg font-bold text-gray-900 mb-4">
-                                <span>Total</span>
-                                <span id="cart-total">KES 0</span>
+                        <!-- Payment Method -->
+                        <div class="pt-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2 font-bold">Payment Method</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-3 p-4 border border-gray-200 rounded-2xl cursor-pointer hover:bg-gray-50 transition-all border-primary-100 bg-primary-50/20 shadow-sm">
+                                    <input type="radio" name="payment-method" value="Payment on Delivery" checked
+                                        class="w-5 h-5 text-primary-600 focus:ring-primary-500 border-gray-300">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold text-gray-800">Payment on Delivery</span>
+                                        <span class="text-[10px] text-gray-500">Pay when you receive your items</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border border-gray-200 rounded-2xl cursor-pointer hover:bg-gray-50 transition-all">
+                                    <input type="radio" name="payment-method" value="M-Pesa"
+                                        class="w-5 h-5 text-primary-600 focus:ring-primary-500 border-gray-300">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold text-gray-800">Pay with M-Pesa</span>
+                                        <span class="text-[10px] text-primary-600 font-black uppercase tracking-widest">Lipa na Pochi: 0115516136</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-6 mt-6">
+                            <div class="flex justify-between text-xl font-black text-gray-900 mb-6 tracking-tight">
+                                <span>Total Amount</span>
+                                <span id="cart-total" class="text-primary-600">KES 0</span>
                             </div>
                             <button type="submit"
-                                class="w-full bg-gradient-to-r from-primary-500 to-primary-900 text-white font-bold py-3 rounded-lg hover:shadow-lg transition transform hover:-translate-y-0.5">
-                                Place Order
+                                class="w-full bg-gradient-to-r from-primary-500 to-primary-900 text-white font-black py-4 rounded-xl hover:shadow-2xl transition transform hover:-translate-y-1 shadow-lg flex items-center justify-center gap-2">
+                                <span>Place Order Now</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </button>
                         </div>
                     </form>
@@ -219,154 +215,84 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+    <footer class="bg-gray-900 text-gray-300 py-12">
         <div class="container mx-auto px-4 grid md:grid-cols-3 gap-8">
             <div>
                 <h3 class="text-xl font-bold text-white mb-4">Biltone Supplies</h3>
-                <p class="text-sm mb-4">Biltones Supplies is your customer based platform dedicated to providing you
-                    with affordable barber shop and beauty supplies.</p>
+                <p class="text-sm mb-4 opacity-75">Biltones Supplies is your customer based platform dedicated to providing you with affordable barber shop and beauty supplies.</p>
             </div>
             <div>
-                <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                <h4 class="font-bold text-white mb-4 border-b border-gray-800 pb-2 inline-block">Quick Links</h4>
                 <ul class="space-y-2 text-sm">
-                    <li><a href="products.html" class="hover:text-white">Products</a></li>
-                    <li><a href="track.html" class="hover:text-white">Track Order</a></li>
-                    <li><a href="about.html" class="hover:text-white">About Us</a></li>
-                    <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+                    <li><a href="products.html" class="hover:text-white transition">Products</a></li>
+                    <li><a href="track.html" class="hover:text-white transition">Track Order</a></li>
+                    <li><a href="about.html" class="hover:text-white transition">About Us</a></li>
+                    <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="font-bold text-white mb-4">Contact Us</h4>
+                <h4 class="font-bold text-white mb-4 border-b border-gray-800 pb-2 inline-block">Contact Us</h4>
                 <div class="space-y-3 text-sm">
-                    <p class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        Nairobi, Kenya
-                    </p>
-                    <p class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        +254 115 516 136
-                    </p>
-                    <p class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                        </svg>
-                        0115 516 136
-                    </p>
-                    <p class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        biltonesbrand@gmail.com
-                    </p>
+                    <p class="flex items-center gap-3 opacity-80"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Nairobi, Kenya</p>
+                    <p class="flex items-center gap-3 opacity-80"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> +254 115 516 136</p>
+                    <p class="flex items-center gap-3 opacity-80"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> biltonesbrand@gmail.com</p>
                 </div>
             </div>
         </div>
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            &copy; 2025 Biltone Supplies. All rights reserved.
-        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-xs opacity-50">&copy; 2025 Biltone Supplies. All rights reserved.</div>
     </footer>
 
-
-    <!-- Success Modal -->
     <!-- Success Modal -->
     <div id="success-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl transform transition-all overflow-hidden relative">
-            <!-- Header section -->
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h3 class="text-3xl font-bold text-gray-900 mb-1">Order Placed Successfully!</h3>
                 <p id="email-status" class="text-gray-500 italic text-sm">Preparing your confirmation email...</p>
             </div>
 
-            <!-- Visual Stepper Restoration -->
             <div class="mb-10 relative">
                 <div class="flex justify-between items-center max-w-xl mx-auto py-4">
-                    <!-- Step 1 (Always Active on Success) -->
                     <div class="flex flex-col items-center gap-2 relative z-10 w-1/4">
-                        <div id="modal-step-pending" class="w-10 h-10 rounded-full bg-primary-500 border-4 border-primary-500 text-white flex items-center justify-center shadow-lg transition-all scale-110">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-primary-500 border-4 border-primary-500 text-white flex items-center justify-center shadow-lg transition-all scale-110"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-primary-600">Pending</span>
                     </div>
-                    
                     <div class="h-0.5 bg-gray-100 flex-grow -mx-4 mt-[-2rem]"></div>
-
-                    <!-- Step 2 -->
                     <div class="flex flex-col items-center gap-2 relative z-10 w-1/4 opacity-40">
-                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                            </svg>
-                        </div>
+                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg></div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Processing</span>
                     </div>
-
                     <div class="h-0.5 bg-gray-100 flex-grow -mx-4 mt-[-2rem]"></div>
-
-                    <!-- Step 3 -->
                     <div class="flex flex-col items-center gap-2 relative z-10 w-1/4 opacity-40">
-                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
+                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">In Transit</span>
                     </div>
-
                     <div class="h-0.5 bg-gray-100 flex-grow -mx-4 mt-[-2rem]"></div>
-
-                    <!-- Step 4 -->
                     <div class="flex flex-col items-center gap-2 relative z-10 w-1/4 opacity-40">
-                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
+                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Delivered</span>
                     </div>
                 </div>
             </div>
             
-            <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100 relative group">
+            <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100 relative group text-center">
                 <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Order Tracking ID</p>
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center justify-center gap-4">
                     <span id="display-order-id" class="font-mono font-black text-2xl text-primary-900 tracking-tighter">ORD-XXXXXX</span>
-                    <button onclick="copyOrderId()" class="bg-white border border-gray-200 p-2 text-primary-600 hover:text-primary-800 rounded-xl shadow-sm hover:shadow transition-all group-hover:scale-110" title="Copy ID">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                        </svg>
+                    <button onclick="copyOrderId()" class="bg-white border border-gray-200 p-2 text-primary-600 hover:text-primary-800 rounded-xl shadow-sm hover:shadow transition-all" title="Copy ID">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                     </button>
                 </div>
             </div>
 
             <div class="space-y-4">
                 <a id="tracking-link" href="#" class="w-full bg-gradient-to-r from-primary-500 to-primary-900 text-white font-black py-5 rounded-2xl transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                     Go to Tracking Page
                 </a>
-                <button onclick="modal.classList.add('hidden')" class="w-full py-3 text-gray-400 font-bold hover:text-primary-600 transition">Return to Shop</button>
+                <button onclick="modal.classList.add('hidden')" class="w-full py-3 text-gray-400 font-bold hover:text-primary-600 transition underline underline-offset-4">Return to Shop</button>
             </div>
         </div>
     </div>
@@ -377,15 +303,11 @@
         const checkoutForm = document.getElementById('checkout-form');
         const modal = document.getElementById('success-modal');
 
-        // Initialize EmailJS immediately
         emailjs.init("qmvHsojqFObPR6Htv"); 
 
-        // Helper: Wait for DB script to be ready
         async function waitForDB(retries = 10) {
             for (let i = 0; i < retries; i++) {
-                if (window.DB && typeof window.DB.createOrder === 'function') {
-                    return true;
-                }
+                if (window.DB && typeof window.DB.createOrder === 'function') return true;
                 await new Promise(r => setTimeout(r, 300));
             }
             return false;
@@ -414,9 +336,7 @@
                             <button onclick="App.updateQuantity(${item.id}, ${item.quantity + 1}); renderCart()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold">+</button>
                         </div>
                         <button onclick="App.removeFromCart(${item.id}); renderCart()" class="text-red-400 hover:text-red-600 p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </button>
                     </div>
                 `;
@@ -434,16 +354,19 @@
             }
 
             const btn = checkoutForm.querySelector('button[type="submit"]');
-            const originalText = btn.textContent;
-            btn.textContent = 'Processing...';
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Processing Order...';
             btn.disabled = true;
+
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
 
             const orderData = {
                 customer: {
                     name: document.getElementById('name').value,
                     email: document.getElementById('email').value,
                     phone: document.getElementById('phone').value,
-                    location: document.getElementById('location').value
+                    location: document.getElementById('location').value,
+                    payment_method: paymentMethod
                 },
                 items: App.state.cart,
                 total: App.getCartTotal()
@@ -451,20 +374,16 @@
 
             try {
                 const dbReady = await waitForDB();
-                if (!dbReady) {
-                    throw new Error("Database connection not ready. Please try again.");
-                }
+                if (!dbReady) throw new Error("Database connection not ready.");
 
                 const order = await window.DB.createOrder(orderData);
                 
-                // Show Success Modal immediately
                 document.getElementById('display-order-id').textContent = order.id;
                 document.getElementById('tracking-link').href = `track.html?id=${order.id}`;
                 modal.classList.remove('hidden');
                 
                 const statusEl = document.getElementById('email-status');
 
-                // --- AUTOMATED EMAIL NOTIFICATION ---
                 try {
                     statusEl.innerHTML = '<span class="animate-pulse text-gray-500">Sending confirmation email...</span>';
                     
@@ -483,25 +402,18 @@
                         order_id: order.id,
                         orders: ordersArray, 
                         items_list: itemsSummary,
+                        payment_method: paymentMethod,
                         total_amount: App.formatMoney(order.total),
-                        cost: {
-                            shipping: "0.00",
-                            tax: "0.00",
-                            total: order.total
-                        },
+                        cost: { shipping: "0.00", tax: "0.00", total: order.total },
                         shop_name: "Biltone Supplies"
                     };
 
                     await emailjs.send("service_ilctr3l", "template_79daq6t", templateParams);
-                    statusEl.innerHTML = '✅ Confirmation email sent! Please check your inbox (and spam folder).';
+                    statusEl.innerHTML = '✅ Confirmation email sent!';
                     statusEl.className = 'text-center text-green-600 mb-6 font-semibold';
                 } catch (emailErr) {
                     console.error("Email: Automation failed:", emailErr);
-                    let errorMsg = "Check EmailJS Quota or connection";
-                    if (emailErr && emailErr.text) errorMsg = emailErr.text;
-                    else if (emailErr && emailErr.message) errorMsg = emailErr.message;
-                    
-                    statusEl.innerHTML = `⚠️ <strong>Email failed to send.</strong><br><span class="text-xs text-red-500">Reason: ${errorMsg}</span><br><div class="mt-2 text-primary-900 font-bold">Please take a screenshot of your Order ID below!</div>`;
+                    statusEl.innerHTML = `⚠️ <strong>Email failed to send.</strong><br><div class="mt-2 text-primary-900 font-bold text-xs uppercase">Take a screenshot of your Order ID!</div>`;
                     statusEl.className = 'text-center text-orange-600 mb-6 italic';
                 }
 
@@ -510,12 +422,11 @@
             } catch (error) {
                 console.error("Cart: Error caught:", error);
                 alert("Failed to place order: " + error.message);
-                btn.textContent = originalText;
+                btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         });
 
-        // Copy functionality
         window.copyOrderId = function() {
             const id = document.getElementById('display-order-id').textContent;
             navigator.clipboard.writeText(id).then(() => {
