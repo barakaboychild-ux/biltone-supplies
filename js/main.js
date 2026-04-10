@@ -15,6 +15,7 @@ const App = {
         this.updateCartUI();
         this.setupMobileMenu();
         this.setupAdminMobileMenu();
+        this.setupInactivityTimer();
     },
 
     setupMobileMenu() {
@@ -132,6 +133,32 @@ const App = {
             badge2.textContent = count;
             badge2.classList.toggle('hidden', count === 0);
         }
+    },
+
+    // --- Inactivity Timeout ---
+    setupInactivityTimer() {
+        // Only run if user is logged in
+        if (!sessionStorage.getItem('biltone_session')) return;
+
+        let timeout;
+        const INACTIVITY_LIMIT = 2 * 60 * 1000; // 2 minutes
+
+        const resetTimer = () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                alert("Session expired due to inactivity. Logging out.");
+                this.logout();
+            }, INACTIVITY_LIMIT);
+        };
+
+        // Events to track activity
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+        events.forEach(name => {
+            document.addEventListener(name, resetTimer, true);
+        });
+
+        // Start timer initially
+        resetTimer();
     },
 
     // --- Auth System ---
