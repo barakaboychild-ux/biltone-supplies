@@ -269,14 +269,39 @@
                 }
 
                 // Call Supabase Auth
-                const user = await window.DB.loginUser(email, password);
+                const authUser = await window.DB.loginUser(email, password);
 
-                if (!user) {
+                if (!authUser) {
                     throw new Error("Login failed - No user data returned.");
                 }
 
+                // Fetch Profile Data (Name & Role)
+                let name = authUser.user_metadata?.full_name || 'Admin';
+                let role = 'staff';
+
+                try {
+                    const { data: profile } = await supabaseClient
+                        .from('profiles')
+                        .select('full_name, role')
+                        .eq('id', authUser.id)
+                        .single();
+                    
+                    if (profile) {
+                        name = profile.full_name || name;
+                        role = profile.role || role;
+                    }
+                } catch (e) {
+                    console.warn("Profile fetch failed, using metadata fallback:", e);
+                }
+
                 // Manage Session
-                sessionStorage.setItem('biltone_session', JSON.stringify(user));
+                const sessionData = {
+                    ...authUser,
+                    name: name,
+                    role: role
+                };
+
+                sessionStorage.setItem('biltone_session', JSON.stringify(sessionData));
                 window.location.href = 'dashboard.html';
 
             } catch (err) {

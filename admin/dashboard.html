@@ -122,7 +122,10 @@
         const session = sessionStorage.getItem('biltone_session');
         const user = session ? JSON.parse(session) : null;
         if (!user) window.location.href = 'login.html';
-        document.getElementById('admin-name').textContent = user.name;
+        
+        // Display only first name
+        const displayName = user.name ? user.name.split(' ')[0] : 'Admin';
+        document.getElementById('admin-name').textContent = displayName;
 
         // Owner Check
         if (user.role === 'owner') {

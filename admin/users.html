@@ -64,7 +64,10 @@
         </header>
 
         <div class="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8 hidden md:block">User Management</h2>
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 hidden md:block">User Management</h2>
+                <div class="text-sm text-gray-500 hidden md:block">Welcome, <span id="admin-name" class="font-semibold text-gray-900">Admin</span></div>
+            </div>
 
         <!-- Pending Profile Updates (Owner Only) -->
         <div id="pending-updates-section" class="hidden mb-8">
@@ -119,6 +122,12 @@
         if (!user || user.role !== 'owner') {
             alert("Access Denied. Owner only.");
             window.location.href = 'dashboard.html';
+        }
+
+        // Display only first name
+        if (document.getElementById('admin-name')) {
+            const displayName = user.name ? user.name.split(' ')[0] : 'Admin';
+            document.getElementById('admin-name').textContent = displayName;
         }
 
         async function renderUsers() {

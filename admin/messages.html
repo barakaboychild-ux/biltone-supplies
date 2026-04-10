@@ -71,6 +71,7 @@
         <div class="container mx-auto px-4 py-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <h1 class="text-2xl font-bold text-gray-900 font-primary hidden md:block">Customer Inquiries</h1>
+                <div class="text-sm text-gray-500 hidden md:block">Welcome, <span id="admin-name" class="font-semibold text-gray-900">Admin</span></div>
                 <p class="text-sm text-gray-500">Track and respond to customer messages.</p>
             </div>
 
@@ -101,6 +102,12 @@
         const session = sessionStorage.getItem('biltone_session');
         if (!session) window.location.href = 'login.html';
         const user = JSON.parse(session);
+
+        // Display only first name
+        if (document.getElementById('admin-name')) {
+            const displayName = user.name ? user.name.split(' ')[0] : 'Admin';
+            document.getElementById('admin-name').textContent = displayName;
+        }
 
         if (user.role === 'owner') {
             document.getElementById('users-link').classList.remove('hidden');
