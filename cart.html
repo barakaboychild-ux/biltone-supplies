@@ -282,32 +282,91 @@
 
 
     <!-- Success Modal -->
+    <!-- Success Modal -->
     <div id="success-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl transform transition-all">
-            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                </svg>
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl transform transition-all overflow-hidden relative">
+            <!-- Header section -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-gray-900 mb-1">Order Placed Successfully!</h3>
+                <p id="email-status" class="text-gray-500 italic text-sm">Preparing your confirmation email...</p>
             </div>
-            <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">Order Placed!</h3>
-            <p id="email-status" class="text-center text-gray-500 mb-6 italic">Preparing your confirmation email...</p>
+
+            <!-- Visual Stepper Restoration -->
+            <div class="mb-10 relative">
+                <div class="flex justify-between items-center max-w-xl mx-auto py-4">
+                    <!-- Step 1 (Always Active on Success) -->
+                    <div class="flex flex-col items-center gap-2 relative z-10 w-1/4">
+                        <div id="modal-step-pending" class="w-10 h-10 rounded-full bg-primary-500 border-4 border-primary-500 text-white flex items-center justify-center shadow-lg transition-all scale-110">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-primary-600">Pending</span>
+                    </div>
+                    
+                    <div class="h-0.5 bg-gray-100 flex-grow -mx-4 mt-[-2rem]"></div>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center gap-2 relative z-10 w-1/4 opacity-40">
+                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Processing</span>
+                    </div>
+
+                    <div class="h-0.5 bg-gray-100 flex-grow -mx-4 mt-[-2rem]"></div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center gap-2 relative z-10 w-1/4 opacity-40">
+                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">In Transit</span>
+                    </div>
+
+                    <div class="h-0.5 bg-gray-100 flex-grow -mx-4 mt-[-2rem]"></div>
+
+                    <!-- Step 4 -->
+                    <div class="flex flex-col items-center gap-2 relative z-10 w-1/4 opacity-40">
+                        <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Delivered</span>
+                    </div>
+                </div>
+            </div>
             
-            <div class="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 relative">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Order ID</p>
-                <div class="flex items-center justify-between">
-                    <span id="display-order-id" class="font-mono font-bold text-primary-900">ORD-XXXXXX</span>
-                    <button onclick="copyOrderId()" class="text-primary-600 hover:text-primary-800 p-2 rounded-lg hover:bg-primary-50 transition" title="Copy Order ID">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100 relative group">
+                <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Order Tracking ID</p>
+                <div class="flex items-center justify-between gap-4">
+                    <span id="display-order-id" class="font-mono font-black text-2xl text-primary-900 tracking-tighter">ORD-XXXXXX</span>
+                    <button onclick="copyOrderId()" class="bg-white border border-gray-200 p-2 text-primary-600 hover:text-primary-800 rounded-xl shadow-sm hover:shadow transition-all group-hover:scale-110" title="Copy ID">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                         </svg>
                     </button>
                 </div>
             </div>
 
-            <div class="space-y-3">
-                <a id="tracking-link" href="#" class="w-full bg-primary-100 hover:bg-primary-200 text-primary-900 font-bold py-4 rounded-xl transition flex items-center justify-center">
-                    Track Your Order
+            <div class="space-y-4">
+                <a id="tracking-link" href="#" class="w-full bg-gradient-to-r from-primary-500 to-primary-900 text-white font-black py-5 rounded-2xl transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Go to Tracking Page
                 </a>
+                <button onclick="modal.classList.add('hidden')" class="w-full py-3 text-gray-400 font-bold hover:text-primary-600 transition">Return to Shop</button>
             </div>
         </div>
     </div>
