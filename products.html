@@ -330,6 +330,7 @@
                         </div>
                         <div class="p-2 sm:p-4">
                             <div class="text-xs text-primary-500 font-semibold mb-1 uppercase tracking-wide">${product.category || 'General'}</div>
+                            <p class="text-[10px] sm:text-xs text-gray-500 line-clamp-2 my-1" title="${product.description || ''}">${product.description || ''}</p>
                             <h3 class="font-semibold text-gray-800 mb-1 sm:mb-2 text-sm sm:text-base truncate" title="${product.title}">${product.title}</h3>
                             <div class="flex justify-between items-center mt-4">
                                 <div class="text-xs sm:text-base flex flex-col sm:flex-row sm:gap-1">${priceDisplay}</div>
